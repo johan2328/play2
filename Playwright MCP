@@ -1,37 +1,22 @@
 name: Build & Deploy Playwright MCP
-
 on:
   push:
-    branches: [main]           # o la rama que uses
+    branches: [main]
 
 jobs:
-  build-and-deploy:
+  build-deploy:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Setup Node
-      uses: actions/setup-node@v4
-      with:
-        node-version: 20       # usa la misma que declares en package.json
-
-    - name: Install dependencies
-      run: npm ci
-
-    - name: Build TypeScript
-      run: npm run build       # asume "build": "tsc" y genera /dist
-
-    - name: Install Playwright browsers
-      run: npx playwright install --with-deps
-
-    - name: Zip artifact
-      run: zip -r release.zip . -x "node_modules/*" ".git/*"
-
-    - name: Deploy to Azure Web App
-      uses: azure/webapps-deploy@v3
-      with:
-        app-name: lab-bapro          # <- tu Web App
-        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-        package: release.zip
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npm run build        # si usas TS
+      - run: npx playwright install --with-deps
+      - run: zip -r release.zip . -x "node_modules/*" ".git/*"
+      - uses: azure/webapps-deploy@v3
+        with:
+          app-name: <NOMBRE-WEBAPP>
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+          package: release.zip
