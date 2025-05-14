@@ -17,6 +17,6 @@ jobs:
       - run: zip -r release.zip . -x "node_modules/*" ".git/*"
       - uses: azure/webapps-deploy@v3
         with:
-          app-name: <NOMBRE-WEBAPP>
+          app-name: lab-bapro-gfdtdrcpf5ddg8fk.centralus-01.azurewebsites.net
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
           package: release.zip
